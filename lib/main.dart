@@ -1,123 +1,167 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'controllers/auth_controller.dart';
+import 'controllers/learning_controller.dart';
+import 'controllers/quiz_controller.dart';
+import 'controllers/mock_test_controller.dart';
+import 'controllers/rewards_controller.dart';
+import 'controllers/analytics_controller.dart';
+import 'controllers/interviews_controller.dart';
+import 'controllers/notification_controller.dart';
+import 'views/login_view.dart';
+import 'views/signup_view.dart';
+import 'views/home_view.dart';
+import 'views/quiz_view.dart';
+import 'views/quiz_result_view.dart';
+import 'views/profile_view.dart';
+import 'views/learning_view.dart';
+import 'views/learning_category_view.dart';
+import 'views/programming_languages_view.dart';
+import 'views/learning_content_view.dart';
+import 'views/mock_test_view.dart';
+import 'views/mock_test_result_view.dart';
+import 'views/rewards_view.dart';
+import 'views/analytics_view.dart';
+import 'views/interviews_view.dart';
+import 'views/admin_view.dart';
+import 'views/interview_detail_view.dart';
+import 'views/interview_feedback_view.dart';
+import 'views/videos_view.dart';
+import 'views/video_player_view.dart';
+import 'views/pdf_list_view.dart';
+import 'views/pdf_reader_view.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Initialize all controllers
+  Get.put(AuthController());
+  Get.put(LearningController());
+  Get.put(QuizController());
+  Get.put(MockTestController());
+  Get.put(RewardsController());
+  Get.put(AnalyticsController());
+  Get.put(InterviewsController());
+  Get.put(NotificationController());
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo Project',
+    return GetMaterialApp(
+      title: 'CareerCrack',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        primaryColor: Colors.indigo,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.indigo,
+          primary: Colors.indigo,
+          secondary: Colors.green,
+          tertiary: Colors.orange,
+        ),
+        textTheme: GoogleFonts.poppinsTextTheme(),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.indigo,
+          foregroundColor: Colors.white,
+          elevation: 0,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.indigo,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          ),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page Project'),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: Colors.indigo,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.indigo,
+          brightness: Brightness.dark,
+          primary: Colors.indigo,
+          secondary: Colors.green,
+          tertiary: Colors.orange,
+        ),
+        textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.indigo,
+          foregroundColor: Colors.white,
+          elevation: 0,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.indigo,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          ),
+        ),
+      ),
+      themeMode: ThemeMode.system, // or light/dark based on preference
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => AuthWrapper()),
+        GetPage(name: '/login', page: () => LoginView()),
+        GetPage(name: '/signup', page: () => SignupView()),
+        GetPage(name: '/home', page: () => HomeView()),
+        GetPage(name: '/quiz', page: () => QuizView()),
+        GetPage(name: '/quiz_result', page: () => QuizResultView()),
+        GetPage(name: '/profile', page: () => ProfileView()),
+        GetPage(name: '/learning', page: () => LearningView()),
+        GetPage(
+          name: '/programming_languages',
+          page: () => ProgrammingLanguagesView(),
+        ),
+        GetPage(name: '/learning_category', page: () => LearningCategoryView()),
+        GetPage(name: '/learning_content', page: () => NotesView()),
+        GetPage(name: '/mock_tests', page: () => MockTestView()),
+        GetPage(name: '/mock_test_result', page: () => MockTestResultView()),
+        GetPage(name: '/rewards', page: () => RewardsView()),
+        GetPage(name: '/analytics', page: () => AnalyticsView()),
+        GetPage(name: '/interviews', page: () => InterviewsView()),
+        GetPage(name: '/interview_detail', page: () => InterviewDetailView()),
+        GetPage(
+          name: '/interview_feedback',
+          page: () => InterviewFeedbackView(),
+        ),
+        GetPage(name: '/admin', page: () => AdminView()),
+        GetPage(name: '/videos', page: () => VideosView()),
+        GetPage(name: '/video_player', page: () => VideoPlayerView()),
+        GetPage(name: '/pdfs', page: () => PdfListView()),
+        GetPage(name: '/pdf_reader', page: () => PdfReaderView()),
+        // Add other routes later
+      ],
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
+    final authController = Get.find<AuthController>();
+
+    return Obx(() {
+      if (authController.user.value != null) {
+        return HomeView();
+      } else {
+        return LoginView();
+      }
+    });
   }
 }

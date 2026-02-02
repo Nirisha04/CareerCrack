@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "883713355858",
+    "project_id": "career-crack",
+    "storage_bucket": "career-crack.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883713355858:android:ac73aec4775a24587c6f8b",
+        "android_client_info": {
+          "package_name": "com.example.careercrack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883713355858-qq82lsk06tbc7b36dgjf0b76s95kn4kf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.careercrack",
+            "certificate_hash": "80f7b858cf995949c58c4027e8739a123e204a9c"
+          }
+        },
+        {
+          "client_id": "883713355858-51e55oiguaijta48mif9dhqinvpiqvvj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMRY0wEauOGaQcYBnGgB3s8D_a06eH4EA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883713355858-51e55oiguaijta48mif9dhqinvpiqvvj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "883713355858-28gqbnlqstffus75cvs6hns9vgg3f2gf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.careercrack"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,18 @@
+Analyzing careercrack...                                        
+
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\analytics_view.dart:7:7 - use_key_in_widget_constructors
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\interview_detail_view.dart:7:7 - use_key_in_widget_constructors
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\interview_feedback_view.dart:4:7 - use_key_in_widget_constructors
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\interviews_view.dart:5:7 - use_key_in_widget_constructors
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\learning_category_view.dart:5:7 - use_key_in_widget_constructors
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\learning_content_view.dart:3:7 - use_key_in_widget_constructors
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\learning_view.dart:5:7 - use_key_in_widget_constructors
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\mock_test_result_view.dart:5:7 - use_key_in_widget_constructors
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\notes_view.dart:3:7 - use_key_in_widget_constructors
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\pdf_list_view.dart:5:7 - use_key_in_widget_constructors
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\programming_languages_view.dart:3:7 - use_key_in_widget_constructors
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\quiz_result_view.dart:4:7 - use_key_in_widget_constructors
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\quiz_view.dart:5:7 - use_key_in_widget_constructors
+   info - Constructors for public widgets should have a named 'key' parameter - lib\views\videos_view.dart:5:7 - use_key_in_widget_constructors
+
+14 issues found. (ran in 2.4s)
