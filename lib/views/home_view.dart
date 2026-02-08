@@ -42,15 +42,23 @@ class HomeView extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Level 5', style: Theme.of(context).textTheme.titleMedium),
-                        Text('2500 / 3000 XP', style: Theme.of(context).textTheme.bodyMedium),
+                        Text(
+                          'Level 5',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        Text(
+                          '2500 / 3000 XP',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     LinearProgressIndicator(
                       value: 2500 / 3000,
                       backgroundColor: Colors.grey[300],
-                      valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.secondary),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
                   ],
                 ),
@@ -63,9 +71,16 @@ class HomeView extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
-                    Icon(Icons.local_fire_department, color: Colors.orange, size: 30),
+                    Icon(
+                      Icons.local_fire_department,
+                      color: Colors.orange,
+                      size: 30,
+                    ),
                     const SizedBox(width: 10),
-                    Text('7 Day Streak!', style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      '7 Day Streak!',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                   ],
                 ),
               ),
@@ -75,9 +90,7 @@ class HomeView extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.indigo, Colors.blue],
-                ),
+                gradient: LinearGradient(colors: [Colors.indigo, Colors.blue]),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Row(
@@ -88,13 +101,22 @@ class HomeView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Daily Challenge', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                        Text('Complete 5 quizzes to earn bonus XP!', style: TextStyle(color: Colors.white70)),
+                        Text(
+                          'Daily Challenge',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Complete 5 quizzes to earn bonus XP!',
+                          style: TextStyle(color: Colors.white70),
+                        ),
                       ],
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () => Get.toNamed('/quiz'),
+                    onPressed: () => Get.toNamed('/quiz_selection'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.indigo,
@@ -106,17 +128,46 @@ class HomeView extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             // Quick Action Cards
-            Text('Quick Actions', style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              'Quick Actions',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 10),
             GridView.count(
               crossAxisCount: 2,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                _buildQuickActionCard(context, 'Quiz', Icons.quiz, () => Get.toNamed('/quiz')),
-                _buildQuickActionCard(context, 'Mock Test', Icons.assignment, () => Get.toNamed('/mock_tests')),
-                _buildQuickActionCard(context, 'Coding', Icons.code, () => Get.toNamed('/learning')),
-                _buildQuickActionCard(context, 'Interview', Icons.mic, () => Get.toNamed('/interviews')),
+                _buildQuickActionCard(
+                  context,
+                  'Quiz',
+                  Icons.quiz,
+                  () => Get.toNamed('/quiz_selection'),
+                ),
+                _buildQuickActionCard(
+                  context,
+                  'Mock Test',
+                  Icons.assignment,
+                  () => Get.toNamed('/mock_tests'),
+                ),
+                _buildQuickActionCard(
+                  context,
+                  'Aptitude',
+                  Icons.calculate,
+                  () => Get.toNamed('/aptitude_selection'),
+                ),
+                _buildQuickActionCard(
+                  context,
+                  'Coding',
+                  Icons.code,
+                  () => Get.toNamed('/coding_selection'),
+                ),
+                _buildQuickActionCard(
+                  context,
+                  'Interview',
+                  Icons.mic,
+                  () => Get.toNamed('/interviews'),
+                ),
               ],
             ),
           ],
@@ -125,7 +176,12 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickActionCard(BuildContext context, String title, IconData icon, VoidCallback onTap) {
+  Widget _buildQuickActionCard(
+    BuildContext context,
+    String title,
+    IconData icon,
+    VoidCallback onTap,
+  ) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -137,9 +193,17 @@ class HomeView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 50, color: Theme.of(context).colorScheme.primary),
+              Icon(
+                icon,
+                size: 50,
+                color: Theme.of(context).colorScheme.primary,
+              ),
               const SizedBox(height: 10),
-              Text(title, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
             ],
           ),
         ),

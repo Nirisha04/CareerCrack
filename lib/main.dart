@@ -32,6 +32,10 @@ import 'views/videos_view.dart';
 import 'views/video_player_view.dart';
 import 'views/pdf_list_view.dart';
 import 'views/pdf_reader_view.dart';
+import 'views/quiz_selection_view.dart';
+import 'views/aptitude_selection_view.dart';
+import 'views/aptitude_detail_view.dart';
+import 'views/coding_selection_view.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -142,6 +146,19 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/video_player', page: () => VideoPlayerView()),
         GetPage(name: '/pdfs', page: () => PdfListView()),
         GetPage(name: '/pdf_reader', page: () => PdfReaderView()),
+        GetPage(name: '/quiz_selection', page: () => const QuizSelectionView()),
+        GetPage(
+          name: '/aptitude_selection',
+          page: () => const AptitudeSelectionView(),
+        ),
+        GetPage(
+          name: '/aptitude_detail',
+          page: () => const AptitudeDetailView(),
+        ),
+        GetPage(
+          name: '/coding_selection',
+          page: () => const CodingSelectionView(),
+        ),
         // Add other routes later
       ],
       debugShowCheckedModeBanner: false,

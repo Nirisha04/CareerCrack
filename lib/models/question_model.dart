@@ -1,6 +1,8 @@
 class Question {
   String id;
   String question;
+  String? codeSnippet;
+  String? language;
   List<String> options;
   int correctAnswerIndex;
   String explanation;
@@ -10,6 +12,8 @@ class Question {
   Question({
     required this.id,
     required this.question,
+    this.codeSnippet,
+    this.language,
     required this.options,
     required this.correctAnswerIndex,
     required this.explanation,
@@ -21,6 +25,8 @@ class Question {
     return Question(
       id: map['id'] ?? '',
       question: map['question'] ?? '',
+      codeSnippet: map['codeSnippet'],
+      language: map['language'],
       options: List<String>.from(map['options'] ?? []),
       correctAnswerIndex: map['correctAnswerIndex'] ?? 0,
       explanation: map['explanation'] ?? '',
@@ -33,6 +39,8 @@ class Question {
     return {
       'id': id,
       'question': question,
+      'codeSnippet': codeSnippet,
+      'language': language,
       'options': options,
       'correctAnswerIndex': correctAnswerIndex,
       'explanation': explanation,

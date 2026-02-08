@@ -1,29 +1,30 @@
 import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
 import '../models/question_model.dart';
+import '../utils/quiz_data.dart';
+import 'auth_controller.dart';
+import 'rewards_controller.dart';
 
 class MockTestController extends GetxController {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   RxList<Question> questions = <Question>[].obs;
   RxInt currentQuestionIndex = 0.obs;
   RxInt score = 0.obs;
   RxBool isLoading = false.obs;
   RxBool showExplanation = false.obs;
   RxInt selectedAnswer = (-1).obs;
-  RxInt timeLeft = 60.obs; // seconds per question for mock test
+  RxInt timeLeft = 60.obs;
   RxInt level = 1.obs;
   RxInt streak = 0.obs;
-  RxInt negativeMarks = 0.obs;
+  RxInt xp = 0.obs;
   RxInt correct = 0.obs;
   RxInt wrong = 0.obs;
 
-  double get calculatedScore => correct.value - (wrong.value * 0.25);
-  // Keep existing score observable for backward compatibility if needed,
-  // but we should probably use calculatedScore.
-  // However, existing view uses score.value (int).
-  // I will update selectAnswer to update score as well for legacy view,
-  // but primarily we care about the result View which uses the controller properties.
+  // Performance tracking
+  RxMap<String, int> categoryCorrect = <String, int>{}.obs;
+  RxMap<String, int> categoryTotal = <String, int>{}.obs;
+  RxList<int> questionTimes = <int>[].obs;
+  DateTime? _questionStartTime;
+  Timer? _timer;
 
   @override
   void onInit() {
@@ -31,75 +32,98 @@ class MockTestController extends GetxController {
     loadMockTestQuestions();
   }
 
+  @override
+  void onClose() {
+    _timer?.cancel();
+    super.onClose();
+  }
+
+  void startTimer() {
+    _timer?.cancel();
+    timeLeft.value = 60;
+    _questionStartTime = DateTime.now();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (timeLeft.value > 0) {
+        timeLeft.value--;
+      } else {
+        timer.cancel();
+        _handleTimeUp();
+      }
+    });
+  }
+
+  void _handleTimeUp() {
+    if (!showExplanation.value) {
+      selectAnswer(-1); // Mark as wrong/skipped
+    }
+  }
+
   Future<void> loadMockTestQuestions() async {
     try {
       isLoading.value = true;
-      // Load mixed difficulty questions
-      QuerySnapshot snapshot = await _firestore
-          .collection('questions')
-          .limit(20)
-          .get();
+      List<Question> allQuestions = [];
 
-      if (snapshot.docs.isEmpty) {
-        await _addSampleQuestions();
-        snapshot = await _firestore.collection('questions').limit(20).get();
-      }
+      // Load all questions from quizData
+      quizData.forEach((category, list) {
+        for (var q in list) {
+          allQuestions.add(
+            Question(
+              id:
+                  DateTime.now().millisecondsSinceEpoch.toString() +
+                  allQuestions.length.toString(),
+              question: q['question'],
+              codeSnippet: q['codeSnippet'],
+              language: q['language'],
+              options: List<String>.from(q['options']),
+              correctAnswerIndex: q['options'].indexOf(q['answer']),
+              explanation: q['explanation'] ?? 'No explanation provided.',
+              category: category,
+              difficulty: q['difficulty'],
+            ),
+          );
+        }
+      });
 
-      questions.value = snapshot.docs
-          .map((doc) => Question.fromMap(doc.data() as Map<String, dynamic>))
-          .toList();
+      allQuestions.shuffle();
+      // Take 20 random questions for the mock test
+      questions.value = allQuestions.take(20).toList();
+      startTimer();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load questions');
+      Get.snackbar('Error', 'Failed to load questions: $e');
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<void> _addSampleQuestions() async {
-    // Same as quiz controller
-    List<Question> sampleQuestions = [
-      Question(
-        id: '1',
-        question: 'What is the capital of France?',
-        options: ['London', 'Berlin', 'Paris', 'Madrid'],
-        correctAnswerIndex: 2,
-        explanation: 'Paris is the capital.',
-        category: 'aptitude',
-        difficulty: 'easy',
-      ),
-      Question(
-        id: '2',
-        question: 'Which language for Flutter?',
-        options: ['Java', 'Dart', 'Python', 'C++'],
-        correctAnswerIndex: 1,
-        explanation: 'Dart is used.',
-        category: 'programming',
-        difficulty: 'easy',
-      ),
-      // Add more
-    ];
-
-    for (var question in sampleQuestions) {
-      await _firestore
-          .collection('questions')
-          .doc(question.id)
-          .set(question.toMap());
-    }
-  }
-
   void selectAnswer(int index) {
+    if (showExplanation.value) return;
+
+    _timer?.cancel();
     selectedAnswer.value = index;
     showExplanation.value = true;
-    if (index == questions[currentQuestionIndex.value].correctAnswerIndex) {
+
+    // Track time taken
+    if (_questionStartTime != null) {
+      questionTimes.add(
+        DateTime.now().difference(_questionStartTime!).inSeconds,
+      );
+    }
+
+    Question currentQ = questions[currentQuestionIndex.value];
+    String cat = currentQ.category;
+    categoryTotal[cat] = (categoryTotal[cat] ?? 0) + 1;
+
+    if (index == currentQ.correctAnswerIndex) {
       score.value += 1;
       correct.value++;
       streak.value++;
+      categoryCorrect[cat] = (categoryCorrect[cat] ?? 0) + 1;
+
+      // XP Logic: 10 base + streak bonus
+      int gainedXp = 10 + (streak.value > 5 ? 5 : 0);
+      xp.value += gainedXp;
     } else {
-      score.value -= 0; // Don't change integer score for legacy view?
-      // User provided formula: correct - wrong*0.25.
-      // If I want to match User's formula, I should use calculatedScore in the UI.
       wrong.value++;
-      negativeMarks.value++;
       streak.value = 0;
     }
   }
@@ -109,30 +133,59 @@ class MockTestController extends GetxController {
       currentQuestionIndex.value++;
       selectedAnswer.value = -1;
       showExplanation.value = false;
-      timeLeft.value = 60;
+      startTimer();
     } else {
-      // Test finished
-      Get.toNamed(
-        '/mock_test_result',
-        arguments: {
-          'score': score.value,
-          'total': questions.length,
-          'streak': streak.value,
-          'negativeMarks': negativeMarks.value,
-        },
-      );
+      _finishTest();
     }
   }
 
+  void _finishTest() {
+    _timer?.cancel();
+    final authController = Get.find<AuthController>();
+    final rewardsController = Get.find<RewardsController>();
+    final userId = authController.user.value?.uid;
+
+    if (userId != null) {
+      // Persist XP to user profile
+      rewardsController.earnXP(userId, xp.value);
+      // Update the main daily streak if they completed a test
+      rewardsController.updateDailyStreak(userId);
+    }
+
+    Get.offNamed(
+      '/mock_test_result',
+      arguments: {
+        'score': score.value,
+        'total': questions.length,
+        'streak': streak.value,
+        'xp': xp.value,
+        'correct': correct.value,
+        'wrong': wrong.value,
+        'categoryPerf': categoryCorrect,
+        'categoryTotal': categoryTotal,
+        'avgTime': questionTimes.isEmpty
+            ? 0
+            : (questionTimes.reduce((a, b) => a + b) / questionTimes.length)
+                  .round(),
+      },
+    );
+  }
+
+  double get calculatedScore => correct.value - (wrong.value * 0.25);
+
   void resetTest() {
+    _timer?.cancel();
     currentQuestionIndex.value = 0;
     score.value = 0;
     selectedAnswer.value = -1;
     showExplanation.value = false;
-    timeLeft.value = 60;
     streak.value = 0;
     correct.value = 0;
     wrong.value = 0;
-    negativeMarks.value = 0;
+    xp.value = 0;
+    categoryCorrect.clear();
+    categoryTotal.clear();
+    questionTimes.clear();
+    loadMockTestQuestions();
   }
 }
