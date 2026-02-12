@@ -15,7 +15,7 @@ class _MockInterviewSelectionViewState
   String selectedDifficulty = 'Easy';
 
   final List<String> categories = ['HR', 'Technical', 'Behavioral'];
-  final List<String> difficulties = ['Easy', 'Medium', 'Hard'];
+  final List<String> difficulties = ['Easy', 'Med', 'Hard'];
 
   @override
   Widget build(BuildContext context) {

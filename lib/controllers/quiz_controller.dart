@@ -16,7 +16,25 @@ class QuizController extends GetxController {
   var isAnswered = false.obs;
   var selectedAnswer = ''.obs;
   var isCorrectAnswer = false.obs;
+  var isLoading = false.obs;
+  var errorMessage = ''.obs;
   String currentCategory = '';
+
+  // Mapping sub-topics to parent categories if local data is organized by parent
+  final Map<String, String> _topicToCategory = {
+    'Arithmetic': 'Quantitative Aptitude',
+    'Algebra': 'Quantitative Aptitude',
+    'Geometry': 'Quantitative Aptitude',
+    'Data Interpretation': 'Quantitative Aptitude',
+    'Syllogism': 'Logical Reasoning',
+    'Blood Relations': 'Logical Reasoning',
+    'Coding-Decoding': 'Logical Reasoning',
+    'Seating Arrangement': 'Logical Reasoning',
+    'Grammar': 'Verbal Ability',
+    'Vocabulary': 'Verbal Ability',
+    'Reading Comprehension': 'Verbal Ability',
+    'Parajumbles': 'Verbal Ability',
+  };
 
   Timer? _timer;
 
@@ -32,34 +50,70 @@ class QuizController extends GetxController {
     isAnswered.value = false;
     selectedAnswer.value = '';
     questions.clear();
+    isLoading.value = true;
+    errorMessage.value = '';
 
-    // Check if we have local data for this category
-    if (quizData.containsKey(category)) {
-      var localQuestions = List<Map<String, dynamic>>.from(quizData[category]!);
+    try {
+      String lookupCategory = category;
 
-      if (onlyCoding) {
-        localQuestions = localQuestions
-            .where((q) => q['codeSnippet'] != null)
-            .toList();
+      // check if category is a sub-topic
+      if (!quizData.containsKey(category) &&
+          _topicToCategory.containsKey(category)) {
+        lookupCategory = _topicToCategory[category]!;
       }
 
-      if (difficulty != null) {
-        localQuestions = localQuestions
-            .where((q) => q['difficulty'] == difficulty.toLowerCase())
-            .toList();
+      // Check if we have local data for this category
+      if (quizData.containsKey(lookupCategory)) {
+        var localQuestions = List<Map<String, dynamic>>.from(
+          quizData[lookupCategory]!,
+        );
+
+        // If it was a sub-topic, try to filter by that sub-topic if questions have a 'topic' or 'subCategory' field
+        // or just use the parent category data as a fallback.
+        // Based on the user's previous request, they merged them, so we just use the parent questions.
+
+        if (onlyCoding) {
+          localQuestions = localQuestions
+              .where((q) => q['codeSnippet'] != null)
+              .toList();
+        }
+
+        if (difficulty != null) {
+          localQuestions = localQuestions
+              .where((q) => q['difficulty'] == difficulty.toLowerCase())
+              .toList();
+        }
+
+        localQuestions.shuffle();
+        // Limit to 10-15 questions for better responsiveness
+        questions.value = localQuestions.take(15).toList();
+      } else {
+        // Fetch from firestore with a timeout
+        final fetchedQuestions = await _service
+            .fetchQuestions(
+              category: category,
+              difficulty: difficulty ?? 'medium',
+            )
+            .timeout(
+              const Duration(seconds: 10),
+              onTimeout: () {
+                throw TimeoutException(
+                  'Fetching questions took too long. Please check your connection.',
+                );
+              },
+            );
+        questions.value = fetchedQuestions;
       }
 
-      localQuestions.shuffle();
-      questions.value = localQuestions;
-    } else {
-      questions.value = await _service.fetchQuestions(
-        category: category,
-        difficulty: difficulty ?? 'medium',
-      );
-    }
-
-    if (questions.isNotEmpty) {
-      startTimer();
+      if (questions.isEmpty) {
+        errorMessage.value = 'No questions found for "$category".';
+      } else {
+        startTimer();
+      }
+    } catch (e) {
+      errorMessage.value = e.toString();
+    } finally {
+      isLoading.value = false;
     }
   }
 

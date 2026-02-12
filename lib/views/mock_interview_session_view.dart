@@ -111,16 +111,20 @@ class MockInterviewSessionView extends StatelessWidget {
                 'Voice Response',
                 Icons.mic,
                 Colors.orange,
-                () {
-                  Get.snackbar(
-                    'Feature Note',
-                    'Audio recording would start here. Proceeding with mock data.',
-                  );
-                  controller.nextQuestion(
-                    'Audio response recorded',
-                    ResponseType.audio,
-                  );
-                  textController.clear();
+                () async {
+                  bool hasPermission = await controller
+                      .checkAndRequestPermissions(ResponseType.audio);
+                  if (hasPermission) {
+                    Get.snackbar(
+                      'Microphone Active',
+                      'Microphone access granted. Starting recording...',
+                    );
+                    controller.nextQuestion(
+                      'Audio response recorded',
+                      ResponseType.audio,
+                    );
+                    textController.clear();
+                  }
                 },
               ),
             ),
@@ -131,16 +135,23 @@ class MockInterviewSessionView extends StatelessWidget {
                 'Video Response',
                 Icons.videocam,
                 Colors.red,
-                () {
-                  Get.snackbar(
-                    'Feature Note',
-                    'Video recording would start here. Proceeding with mock data.',
-                  );
-                  controller.nextQuestion(
-                    'Video response recorded',
-                    ResponseType.video,
-                  );
-                  textController.clear();
+                () async {
+                  bool hasPermission = await controller
+                      .checkAndRequestPermissions(ResponseType.video);
+                  if (hasPermission) {
+                    await controller.initializeCamera();
+                    if (controller.isCameraInitialized.value) {
+                      Get.snackbar(
+                        'Camera Active',
+                        'Camera and Microphone access granted.',
+                      );
+                      controller.nextQuestion(
+                        'Video response recorded',
+                        ResponseType.video,
+                      );
+                      textController.clear();
+                    }
+                  }
                 },
               ),
             ),

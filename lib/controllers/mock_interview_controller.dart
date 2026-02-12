@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:record/record.dart';
+import 'package:camera/camera.dart';
 import '../models/mock_interview_model.dart';
 import '../utils/mock_interview_data.dart';
 
@@ -8,6 +11,12 @@ class MockInterviewController extends GetxController {
   var currentQuestionIndex = 0.obs;
   var responses = <MockInterviewResponse>[].obs;
   var isLoading = false.obs;
+
+  // Hardware related
+  final AudioRecorder audioRecorder = AudioRecorder();
+  CameraController? cameraController;
+  var isCameraInitialized = false.obs;
+  var isRecording = false.obs;
 
   // Timer related
   var remainingSeconds = 0.obs;
@@ -147,9 +156,59 @@ class MockInterviewController extends GetxController {
     Get.toNamed('/mock_interview_feedback');
   }
 
+  Future<bool> checkAndRequestPermissions(ResponseType type) async {
+    if (type == ResponseType.audio) {
+      var status = await Permission.microphone.request();
+      if (status.isPermanentlyDenied) {
+        Get.snackbar(
+          'Permission Required',
+          'Please enable microphone access in settings.',
+        );
+        return false;
+      }
+      return status.isGranted;
+    } else if (type == ResponseType.video) {
+      var cameraStatus = await Permission.camera.request();
+      var micStatus = await Permission.microphone.request();
+      if (cameraStatus.isPermanentlyDenied || micStatus.isPermanentlyDenied) {
+        Get.snackbar(
+          'Permission Required',
+          'Please enable camera and microphone access in settings.',
+        );
+        return false;
+      }
+      return cameraStatus.isGranted && micStatus.isGranted;
+    }
+    return true;
+  }
+
+  Future<void> initializeCamera() async {
+    if (cameraController != null) return;
+
+    try {
+      final cameras = await availableCameras();
+      if (cameras.isEmpty) return;
+
+      cameraController = CameraController(
+        cameras.firstWhere(
+          (camera) => camera.lensDirection == CameraLensDirection.front,
+          orElse: () => cameras.first,
+        ),
+        ResolutionPreset.medium,
+      );
+
+      await cameraController!.initialize();
+      isCameraInitialized.value = true;
+    } catch (e) {
+      Get.snackbar('Camera Error', 'Failed to initialize camera: $e');
+    }
+  }
+
   @override
   void onClose() {
     _timer?.cancel();
+    audioRecorder.dispose();
+    cameraController?.dispose();
     super.onClose();
   }
 }
