@@ -164,9 +164,9 @@ class HomeView extends StatelessWidget {
                 ),
                 _buildQuickActionCard(
                   context,
-                  'Interview',
-                  Icons.mic,
-                  () => Get.toNamed('/interviews'),
+                  'Mock Interview',
+                  Icons.smart_toy,
+                  () => Get.toNamed('/mock_interview_selection'),
                 ),
               ],
             ),

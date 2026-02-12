@@ -36,6 +36,9 @@ import 'views/quiz_selection_view.dart';
 import 'views/aptitude_selection_view.dart';
 import 'views/aptitude_detail_view.dart';
 import 'views/coding_selection_view.dart';
+import 'views/mock_interview_selection_view.dart';
+import 'views/mock_interview_session_view.dart';
+import 'views/mock_interview_feedback_view.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -158,6 +161,18 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/coding_selection',
           page: () => const CodingSelectionView(),
+        ),
+        GetPage(
+          name: '/mock_interview_selection',
+          page: () => MockInterviewSelectionView(),
+        ),
+        GetPage(
+          name: '/mock_interview_session',
+          page: () => MockInterviewSessionView(),
+        ),
+        GetPage(
+          name: '/mock_interview_feedback',
+          page: () => MockInterviewFeedbackView(),
         ),
         // Add other routes later
       ],

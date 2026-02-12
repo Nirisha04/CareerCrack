@@ -86,13 +86,8 @@ class AptitudeDetailView extends StatelessWidget {
         title: Text(topic, style: const TextStyle(fontWeight: FontWeight.w500)),
         trailing: const Icon(Icons.chevron_right),
         onTap: () {
-          // Navigate to specific topic notes (mocked for now)
-          Get.snackbar(
-            'Coming Soon',
-            'Learning content for $topic is being prepared!',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.white,
-          );
+          // Navigate to specific topic quiz
+          Get.toNamed('/quiz', arguments: topic);
         },
       ),
     );
