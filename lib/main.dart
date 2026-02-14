@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'controllers/auth_controller.dart';
-import 'controllers/learning_controller.dart';
+// import 'controllers/learning_controller.dart';
 import 'controllers/quiz_controller.dart';
 import 'controllers/mock_test_controller.dart';
 import 'controllers/rewards_controller.dart';
@@ -16,10 +16,10 @@ import 'views/home_view.dart';
 import 'views/quiz_view.dart';
 import 'views/quiz_result_view.dart';
 import 'views/profile_view.dart';
-import 'views/learning_view.dart';
-import 'views/learning_category_view.dart';
+// import 'views/learning_view.dart';
+// import 'views/learning_category_view.dart';
 import 'views/programming_languages_view.dart';
-import 'views/learning_content_view.dart';
+// import 'views/learning_content_view.dart';
 import 'views/mock_test_view.dart';
 import 'views/mock_test_result_view.dart';
 import 'views/rewards_view.dart';
@@ -28,10 +28,10 @@ import 'views/interviews_view.dart';
 import 'views/admin_view.dart';
 import 'views/interview_detail_view.dart';
 import 'views/interview_feedback_view.dart';
-import 'views/videos_view.dart';
-import 'views/video_player_view.dart';
-import 'views/pdf_list_view.dart';
-import 'views/pdf_reader_view.dart';
+// import 'views/videos_view.dart';
+// import 'views/video_player_view.dart';
+// import 'views/pdf_list_view.dart';
+// import 'views/pdf_reader_view.dart';
 import 'views/quiz_selection_view.dart';
 import 'views/aptitude_selection_view.dart';
 import 'views/aptitude_detail_view.dart';
@@ -47,7 +47,7 @@ void main() async {
 
   // Initialize all controllers
   Get.put(AuthController());
-  Get.put(LearningController());
+  // Get.put(LearningController());
   Get.put(QuizController());
   Get.put(MockTestController());
   Get.put(RewardsController());
@@ -127,13 +127,13 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/quiz', page: () => QuizView()),
         GetPage(name: '/quiz_result', page: () => QuizResultView()),
         GetPage(name: '/profile', page: () => ProfileView()),
-        GetPage(name: '/learning', page: () => LearningView()),
+        // GetPage(name: '/learning', page: () => LearningView()),
         GetPage(
           name: '/programming_languages',
           page: () => ProgrammingLanguagesView(),
         ),
-        GetPage(name: '/learning_category', page: () => LearningCategoryView()),
-        GetPage(name: '/learning_content', page: () => NotesView()),
+        // GetPage(name: '/learning_category', page: () => LearningCategoryView()),
+        // GetPage(name: '/learning_content', page: () => NotesView()),
         GetPage(name: '/mock_tests', page: () => MockTestView()),
         GetPage(name: '/mock_test_result', page: () => MockTestResultView()),
         GetPage(name: '/rewards', page: () => RewardsView()),
@@ -145,10 +145,10 @@ class MyApp extends StatelessWidget {
           page: () => InterviewFeedbackView(),
         ),
         GetPage(name: '/admin', page: () => AdminView()),
-        GetPage(name: '/videos', page: () => VideosView()),
-        GetPage(name: '/video_player', page: () => VideoPlayerView()),
-        GetPage(name: '/pdfs', page: () => PdfListView()),
-        GetPage(name: '/pdf_reader', page: () => PdfReaderView()),
+        // GetPage(name: '/videos', page: () => VideosView()),
+        // GetPage(name: '/video_player', page: () => VideoPlayerView()),
+        // GetPage(name: '/pdfs', page: () => PdfListView()),
+        // GetPage(name: '/pdf_reader', page: () => PdfReaderView()),
         GetPage(name: '/quiz_selection', page: () => const QuizSelectionView()),
         GetPage(
           name: '/aptitude_selection',

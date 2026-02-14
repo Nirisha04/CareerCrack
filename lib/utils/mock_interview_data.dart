@@ -25,19 +25,19 @@ class MockInterviewData {
       suggestedDurationSeconds: 90,
     ),
 
-    // HR Questions - Medium
+    // HR Questions - Med
     MockInterviewQuestion(
       id: 'hr_4',
       text: 'Where do you see yourself in five years?',
       category: 'HR',
-      difficulty: 'Medium',
+      difficulty: 'Med',
       suggestedDurationSeconds: 90,
     ),
     MockInterviewQuestion(
       id: 'hr_5',
       text: 'How do you handle pressure and stress?',
       category: 'HR',
-      difficulty: 'Medium',
+      difficulty: 'Med',
       suggestedDurationSeconds: 120,
     ),
 
@@ -66,19 +66,19 @@ class MockInterviewData {
       suggestedDurationSeconds: 90,
     ),
 
-    // Technical Questions - Medium
+    // Technical Questions - Med
     MockInterviewQuestion(
       id: 'tech_3',
       text: 'What is a REST API and how does it work?',
       category: 'Technical',
-      difficulty: 'Medium',
+      difficulty: 'Med',
       suggestedDurationSeconds: 120,
     ),
     MockInterviewQuestion(
       id: 'tech_4',
       text: 'Explain the difference between SQL and NoSQL databases.',
       category: 'Technical',
-      difficulty: 'Medium',
+      difficulty: 'Med',
       suggestedDurationSeconds: 120,
     ),
 
@@ -108,20 +108,20 @@ class MockInterviewData {
       suggestedDurationSeconds: 90,
     ),
 
-    // Behavioral Questions - Medium
+    // Behavioral Questions - Med
     MockInterviewQuestion(
       id: 'beh_2',
       text:
           'Describe a situation where you had to deal with a difficult colleague.',
       category: 'Behavioral',
-      difficulty: 'Medium',
+      difficulty: 'Med',
       suggestedDurationSeconds: 120,
     ),
     MockInterviewQuestion(
       id: 'beh_3',
       text: 'Give an example of a goal you reached and how you achieved it.',
       category: 'Behavioral',
-      difficulty: 'Medium',
+      difficulty: 'Med',
       suggestedDurationSeconds: 120,
     ),
 
